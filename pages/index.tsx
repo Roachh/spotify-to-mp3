@@ -1,10 +1,18 @@
-import { Button, Container, Grid, TextField } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useEffect, useState } from "react";
 import searchTracks from "../lib/searchTracks";
 
 const CGrid = styled(Grid)`
-  padding-top: 150px;
+  padding-top: 50px;
   justify-content: center;
 `;
 
@@ -20,9 +28,17 @@ const CTextField = styled(TextField)`
   }
 `;
 
+const CCard = styled(Card)`
+  background-color: #2d3036f6;
+  color: white;
+  margin-bottom: 5px;
+  box-shadow: 0px 2px 5px #2d3036f6;
+`;
+
 export default function Home({ token }) {
   const [searchInput, setSearchInput] = useState("");
   const [accessToken, setAccessToken] = useState("");
+  const [songs, setSongs] = useState([]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(event.target.value);
@@ -56,8 +72,30 @@ export default function Home({ token }) {
           Search
         </CButton>
       </CGrid>
-
-      <Grid container></Grid>
+      <Grid
+        container
+        alignItems={"center"}
+        flexDirection={"column"}
+        paddingTop={"45px"}
+      >
+        {songs &&
+          songs.map((song, i) => {
+            return (
+              <Container key={i}>
+                <CCard sx={{ minWidth: 400 }} variant="outlined" raised={true}>
+                  <CardContent>
+                    <Typography sx={{ fontSize: 14 }} gutterBottom>
+                      {song.track.artists[0].name}
+                    </Typography>
+                    <Typography variant="h5" component="div">
+                      {song.track.name}
+                    </Typography>
+                  </CardContent>
+                </CCard>
+              </Container>
+            );
+          })}
+      </Grid>
     </Container>
   );
 }
