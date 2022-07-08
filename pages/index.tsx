@@ -1,6 +1,7 @@
 import { Button, Container, Grid, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useEffect, useState } from "react";
+import searchTracks from "../lib/searchTracks";
 
 const CGrid = styled(Grid)`
   padding-top: 150px;
@@ -33,22 +34,8 @@ export default function Home({ token }) {
   }, []);
 
   async function search() {
-    console.log("Search for " + searchInput);
-
-    let playlistParameters = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + accessToken,
-      },
-    };
-
-    fetch(
-      `https://api.spotify.com/v1/playlists/${searchInput}/tracks`,
-      playlistParameters
-    )
-      .then((res) => res.json())
-      .then((data) => console.log(data.items));
+    const tracks = await searchTracks(searchInput, accessToken);
+    setSongs(tracks);
   }
 
   return (
